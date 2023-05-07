@@ -1,0 +1,35 @@
+<%= render 'share/nav' %>
+<section class="container py-0 py-md-2 py-lg-4">
+    <div class="row py-5">
+        <div class="col-12 col-md-8 col-lg-5 mx-auto">
+            <div class="px-3 py-3 px-md-4 px-lg-5 py-md-4 border border-3 border-secondary" style="border-radius:20px">
+                <h3 class="mb-3">Login</h3>
+                <div id="hideMeAfter5Seconds">
+                    <% if flash[:error_email].blank? && flash[:error_password].blank? %>
+                        <% if flash[:alert] %>
+                            <p class="notice alert alert-danger" role="alert"><%= flash[:alert] %></p>
+                        <% end %>
+                    <% end %>
+                </div>
+                <%= form_with scope: :session, url: "/login", method: :post do |form| %>
+                    <%= form.label :email, "Email", class:"mb-2" %>
+                    <%= form.text_field :email , class:"form-control", value: flash[:email], placeholder:"Your Email(example@gmail.com)" %>
+                    <p class="mb-4 text-danger fw-bold" style="font-size:14px;">
+                        <% if flash[:error_email] %>
+                            <%= flash[:error_email] %>
+                        <% end %>
+                    </p>
+                    <%= form.label :password, "Password", class:"mb-2" %>
+                    <%= form.password_field :password, class:"form-control", placeholder:"Password" %>
+                    <p class="mb-4 text-danger fw-bold" style="font-size:14px;">
+                        <% if flash[:error_password] %>
+                            <%= flash[:error_password] %>
+                        <% end %>
+                    </p>
+                    <%= form.submit 'Login' , class:"btn btn-secondary" %>
+                    <a class="text-primary text-decoration-none" href="/register">Create an account</a>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</section>

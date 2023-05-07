@@ -1,0 +1,159 @@
+<%= render 'share/login_nav' %>
+<section class="container">
+    <%= render 'posts/search' %>
+    <div class="row">
+        <div class="col-12 col-lg-8 blk py-5 mx-auto">
+            <div class="row mb-5 pe-0 pe-md-5">
+                <div class="col-12">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center">
+                            <% if @user.image %>
+                                <img src="<%= @user.image_url %>" width="70px" height="70px" class="rounded-circle me-2">
+                            <% else %>
+                                <%= image_tag "user.png",height: 70, width: 70, class:"rounded-circle me-2" %>
+                            <% end %>
+                            <p class="mb-0 fs-4 fs-md-3 fw-bold text-capitalize"><%= @user.name%></p>
+                        </div>
+                        <% if current_user.id == @user.id %>
+                            <div class="d-none d-md-inline-block">
+                                <a href="" id="changeProfile" data-bs-toggle="modal" data-bs-target="#profileModal" class="d-inline-block"><span class="rounded-pill bg-secondary text-white d-inline-block px-2 px-md-4 py-1 py-md-2">Edit Profile</span></a>
+                                <a href="" id="changePass" data-bs-toggle="modal" data-bs-target="#passwordModal" class="d-inline-block"><span class="rounded-pill bg-success text-white d-inline-block px-2 px-md-4 py-1 py-md-2">Change Password</span></a>
+                            </div>
+                        <% end %>
+                        <div class="dropdown d-md-none">
+                            <button class="btn btn-white border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.39 12c0 .55.2 1.02.59 1.41.39.4.86.59 1.4.59.56 0 1.03-.2 1.42-.59.4-.39.59-.86.59-1.41 0-.55-.2-1.02-.6-1.41A1.93 1.93 0 0 0 6.4 10c-.55 0-1.02.2-1.41.59-.4.39-.6.86-.6 1.41zM10 12c0 .55.2 1.02.58 1.41.4.4.87.59 1.42.59.54 0 1.02-.2 1.4-.59.4-.39.6-.86.6-1.41 0-.55-.2-1.02-.6-1.41a1.93 1.93 0 0 0-1.4-.59c-.55 0-1.04.2-1.42.59-.4.39-.58.86-.58 1.41zm5.6 0c0 .55.2 1.02.57 1.41.4.4.88.59 1.43.59.57 0 1.04-.2 1.43-.59.39-.39.57-.86.57-1.41 0-.55-.2-1.02-.57-1.41A1.93 1.93 0 0 0 17.6 10c-.55 0-1.04.2-1.43.59-.38.39-.57.86-.57 1.41z" fill="#000"></path></svg>
+                            </button>
+                            <ul class="dropdown-menu">
+                                <li>
+                                    <%= link_to 'Edit Profile',class:'dropdown-item', data: { bs_toggle: 'modal', bs_target: 'profileModal', remote: 'true' } %>
+                                </li>
+                                <li>
+                                    <%= link_to 'Change Password',class:'dropdown-item', data: { bs_toggle: 'modal', bs_target: 'passwordModal', remote: 'true' } %>
+                                </li>
+                            </ul> 
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row ps-4 ps-md-5 pe-md-5">
+                <div class="col-12 pe-md-5">
+                    <h4 class="pb-3 border-bottom border-dark-50">Information</h4>
+                    <div class="pt-4 mb-4">
+                        <p class="m-0 fs-6 fw-bold pb-2">Email</p>
+                        <p><%= current_user.email %></p>
+                        <p><%= current_user.password %></p>
+                    </div>
+                    <div class="pt-2">
+                        <p class="m-0 fs-6 fw-bold pb-2">Post Count</p>
+                        <span class="rounded-pill d-inline-block text-white bg-secondary mb-3 px-2"><%= @posts.count %></span>
+                    </div>
+                    <div class="pt-2 mb-4">
+                        <p class="m-0 fs-6 fw-bold pb-2">Bio</p>
+                        <p class=""><%= current_user.bio %></p>
+                    </div>
+                </div>
+            </div>
+            <div class="row ps-md-5">
+                 <div class="col-12">
+                    <h4 class="pb-3 pt-4 border-bottom border-dark-50">My Posts</h4>
+                        <% @posts.each do |post| %>
+                            <div class="pb-3 pt-4 border-bottom border-dark-50">
+                                <div class="row">
+                                    <div class="col-12">
+                                        <div class="d-flex align-items-center mb-3">
+                                            <a href="/profile/<%= post.user.id %>">
+                                                <% if post.user.image %>
+                                                    <img src="<%= post.user.image_url %>" height="24px" width="24px" class="rounded-circle me-2">
+                                                <% else %>
+                                                    <%= image_tag "user.png",height: 24, width: 24, class:"rounded-circle me-2" %>
+                                                <% end %>
+                                            </a>
+                                            <a href="/profile/<%= post.user.id %>" class="text-decoration-none text-black">
+                                                <p class="m-0"><span class="fs-6 me-1 fw-bold text-capitalize"><%= post.user.name %></span><span class="me-1">.</span><span class="text-black-50"><%= time_ago_in_words(post.created_at) %> ago</span></p>
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row mb-3">
+                                    <div class="col-8">
+                                        <a href="/posts/<%= post.id %>" class="text-decoration-none text-black">
+                                            <h4 class="fw-bolder"><%= post.title %></h4>
+                                        </a>
+                                        <a href="/posts/<%= post.id %>" class="text-decoration-none" style="color: rgba(41, 41, 41, 1)">
+                                            <p class="m-0 d-none d-md-block" style="line-height:1.7;text-align:justify;">
+                                                <%=raw (post.description).truncate(450) %> 
+                                            </p>
+                                        </a>
+                                    </div> 
+                                    <div class="col-1"></div>
+                                    <div class="col-3">
+                                        <% if post.image %>
+                                            <img src="<%= post.image_url %>" class="img-fluid" width="150px" height="150px">
+                                        <% end %>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-12 col-md-9">
+                                        <div class="d-flex justify-content-between align-items-center">
+                                            <div class="align-items-end" style="color:rgba(117, 117, 117, 1);">
+                                                <a href="/category/<%= post.category.name %>" class="rounded-pill text-decoration-none d-inline-block px-3 pb-1" style="background-color: rgba(242, 242, 242, 1);color:rgba(117, 117, 117, 1);"><%= post.category.name %></a> <span class="mx-1">.</span> <span>9 min read</span> <span class="mx-1">.</span> <span class="d-none d-md-inline-block">Selected for you</span>
+                                            </div>
+                                            <div class="d-flex justify-content-between align-items-center fs-2">
+                                                <% if post.user_id == session[:user_id] %>
+                                                    <div class="dropdown">
+                                                        <button class="btn btn-white p-0 border-0" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none"><path fill-rule="evenodd" clip-rule="evenodd" d="M4.39 12c0 .55.2 1.02.59 1.41.39.4.86.59 1.4.59.56 0 1.03-.2 1.42-.59.4-.39.59-.86.59-1.41 0-.55-.2-1.02-.6-1.41A1.93 1.93 0 0 0 6.4 10c-.55 0-1.02.2-1.41.59-.4.39-.6.86-.6 1.41zM10 12c0 .55.2 1.02.58 1.41.4.4.87.59 1.42.59.54 0 1.02-.2 1.4-.59.4-.39.6-.86.6-1.41 0-.55-.2-1.02-.6-1.41a1.93 1.93 0 0 0-1.4-.59c-.55 0-1.04.2-1.42.59-.4.39-.58.86-.58 1.41zm5.6 0c0 .55.2 1.02.57 1.41.4.4.88.59 1.43.59.57 0 1.04-.2 1.43-.59.39-.39.57-.86.57-1.41 0-.55-.2-1.02-.57-1.41A1.93 1.93 0 0 0 17.6 10c-.55 0-1.04.2-1.43.59-.38.39-.57.86-.57 1.41z" fill="#000"></path></svg>
+                                                        </button>
+                                                        <ul class="dropdown-menu">
+                                                            <li>
+                                                                <a href="/posts/<%= post.id %>/edit" class="dropdown-item text-decoration-none text-black">Edit</a>
+                                                            </li>
+                                                            <li>
+                                                                <%= link_to 'Destroy', '/posts/'+post.id.to_s, method: :delete, data: { confirm: 'Are you sure?' }, class: "dropdown-item text-danger text-decoration-none" %>
+                                                            </li>
+                                                        </ul>
+                                                    </div>
+                                                <%end%>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        <% end %>
+                        <p class="mt-4"><%= paginate @posts %></p>                      
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+<!--Profile Modal -->
+<div class="modal fade" id="profileModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="image.png"  aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div id="editContent"></div>
+    </div>
+  </div>
+</div>
+<!--Pssword Modal -->
+<div class="modal fade" id="passwordModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="image.png" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+        <div id="passwordContent"></div>
+    </div>
+  </div>
+</div>
+<script>
+    $('#changeProfile').on('click', function() {
+        $("#editContent").html("<%= escape_javascript(render('edit', user: @user)) %>")
+    })
+    $("#changePass").on('click', function () {
+        $("#passwordContent").html("<%= escape_javascript(render('password', user: @user)) %>")
+        $('.passSave').prop('disabled', true);
+        $('#currentPassword').keyup(function () {
+            if ($(this).val() != '') {
+                $('.passSave').prop('disabled', false);
+            }
+        });
+    })
+</script>

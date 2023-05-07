@@ -1,0 +1,54 @@
+<%= render 'share/nav' %>
+<section class="container py-0 py-md-2 py-lg-4">
+    <div class="row py-5">
+        <div class="col-12 col-lg-8 mx-auto">
+            <div class="px-3 py-3 px-md-4 px-lg-5 py-md-4 border border-3 border-secondary" style="border-radius:20px">
+                <h3 class="mb-3">Sign Up</h3>
+                <%= form_with model: @user, url: "/register", method: :post do |form| %>
+                    <div class="row">
+                        <div class="col-12 col-md-6">
+                            <%= form.label :name, "Name", class:"mb-2" %>
+                            <%= form.text_field :name, class:"form-control", placeholder:"Your Name" %>
+                            <span class="mb-4 d-inline-block text-danger fw-bold" style="font-size:14px;">
+                                <% if @user.errors.include?(:name) %>
+                                    <%= form.object.errors.full_messages_for(:name).each do |err| %>
+                                        <%= err %>
+                                        <% break %>
+                                    <% end %>
+                            <% end %>
+                            </span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <%= form.label :email, "Email", class:"mb-2" %>
+                            <%= form.text_field :email, error: form.object.errors.full_messages_for(:email).to_sentence, class:"form-control", placeholder:"Your Email(example@gmail.com)" %>
+                            <span class="mb-4 d-inline-block text-danger fw-bold" style="font-size:14px;"><%= form.object.errors.full_messages_for(:email).to_sentence %></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <%= form.label :password, "Password", class:"mb-2" %>
+                            <%= form.password_field :password, class:"form-control", value: @user.password_confirmation , placeholder:"Password" %>
+                            <span class="mb-4 d-inline-block text-danger fw-bold" style="font-size:14px;"><%= form.object.errors.full_messages_for(:password).to_sentence %></span>
+                        </div>
+                        <div class="col-12 col-md-6">
+                            <%= form.label :password_confirmation, "Confirm Password", class:"mb-2" %>
+                            <%= form.password_field :password_confirmation, value: @user.password_confirmation  , class:"form-control", placeholder:"Confirm Password" %>
+                            <span class="mb-4 d-inline-block text-danger fw-bold" style="font-size:14px;">
+                                <% if @user.errors.include?(:password_confirmation) %> 
+                                    <%= form.object.errors.full_messages_for(:password_confirmation).each do |err| %>
+                                        <%= err %>
+                                        <% break %>
+                                    <% end %>
+                                <% end %>
+                            </span>
+                        </div>
+                        <div class="col-12">
+                            <%= form.label :bio, "Bio", class:"mb-2" %>
+                            <%= form.text_area :bio, class:"form-control", placeholder:"Your Bio" %>
+                            <span class="mb-4 d-inline-block text-danger fw-bold" style="font-size:14px;"><%= form.object.errors.full_messages_for(:bio).to_sentence %></span>
+                        </div>
+                    </div>                   
+                    <%= form.submit 'Sign Up' , class:"btn btn-secondary" %>
+                <% end %>
+            </div>
+        </div>
+    </div>
+</section>
